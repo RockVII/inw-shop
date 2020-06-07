@@ -5,8 +5,13 @@ import com.inwshop.model.ErrorMessage;
 import com.inwshop.model.SingUp;
 import com.inwshop.repository.SingUpRepository;
 import com.inwshop.service.SingUpService;
+import com.inwshop.util.Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+
+
+
 
 @Service
 public class SingUpServiceImpl implements SingUpService {
@@ -26,7 +31,7 @@ public class SingUpServiceImpl implements SingUpService {
         errorMessage = singUpReposiory.duplicateKey("phone",singup.getPhone());
         if(errorMessage.getFieldErrors().size() > 0)
             throw new BadRequestRegisterExeception("Datos duplicados",errorMessage);
-
+        singup.setPassword(Encoder.encoder(singup.getPassword()));
         return singUpReposiory.register(singup);
     }
 }
