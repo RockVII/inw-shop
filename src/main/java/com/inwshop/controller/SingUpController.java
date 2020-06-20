@@ -1,29 +1,51 @@
 package com.inwshop.controller;
 
+import com.inwshop.exceptions.BadRequestRegisterExeception;
+import com.inwshop.model.ErrorMessage;
+import com.inwshop.model.LoginCredentials;
 import com.inwshop.model.SingUp;
+import com.inwshop.service.SendToLogin;
 import com.inwshop.service.SingUpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
+
 
 @RestController
-@RequestMapping("/singup")
+@RequestMapping("/signup")
 public class SingUpController {
 
     @Autowired
     @Qualifier("singUpServiceImpl")
     private SingUpService singUpService;
 
+
     @PostMapping("/register")
-    public String register(@Valid @RequestBody  SingUp singup) {
-        Boolean registered = singUpService.register(singup);
-        return "SIUUU";
+    @PreAuthorize("permitAll()")
+    public String register(@Valid @RequestBody  SingUp singup) throws IOException {
+        String email = singup.getEmail();
+        String password = singup.getPassword();
+        if(singUpService.register(singup))
+            return SendToLogin.send(email,password);
+        return null;
     }
 
-    @GetMapping("/test")
-    public String test(){
-        return "OK";
+
+    @GetMapping("/ver")
+    public ResponseEntity<LoginCredentials> ver(){
+        return new ResponseEntity<LoginCredentials>(new LoginCredentials("dsfsd", "dfsdfs"), HttpStatus.OK) {
+        };
+    }
+
+    @GetMapping("/ver1")
+    @PreAuthorize("permitAll()")
+    public String prueba(){
+        return "Hola papu";
     }
 }

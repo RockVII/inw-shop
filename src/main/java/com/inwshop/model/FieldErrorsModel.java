@@ -2,7 +2,7 @@ package com.inwshop.model;
 
 public class FieldErrorsModel {
 
-    private String field;
+        private String field;
         private String defaultMessage;
 
         public FieldErrorsModel(){}

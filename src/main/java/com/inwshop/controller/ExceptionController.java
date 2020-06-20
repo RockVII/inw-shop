@@ -1,6 +1,7 @@
 package com.inwshop.controller;
 
-import com.inwshop.exception.BadRequestRegisterExeception;
+import com.inwshop.DTO.ErrorDTO;
+import com.inwshop.exceptions.BadRequestRegisterExeception;
 import com.inwshop.model.ErrorMessage;
 import com.inwshop.model.ValidationErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,7 @@ public class ExceptionController {
     @Autowired
     private ValidationErrorMessage validationErrorMessage;
 
-    @Autowired
-    private ErrorMessage errorMessage;
+    private ErrorDTO errorMessage;
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationErrorMessage> error(MethodArgumentNotValidException ex){
@@ -40,7 +40,7 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(BadRequestRegisterExeception.class)
-    public ResponseEntity<ErrorMessage> BadRequestRegisterException(BadRequestRegisterExeception ex){
+    public ResponseEntity<ErrorDTO> BadRequestRegisterException(BadRequestRegisterExeception ex){
         HttpStatus hs = HttpStatus.BAD_REQUEST;
         errorMessage = ex.getErrorMessage();
         errorMessage.setMessage(ex.getMessage());

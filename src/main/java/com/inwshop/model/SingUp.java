@@ -10,27 +10,16 @@ import java.io.Serializable;
 
 public class SingUp implements Serializable {
 
-    private  static final  long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private int id;
-    private int roleId;
 
     @NotNull
-    @Length(min = 3, max = 10)
-    private String userName;
-
-    @NotNull
-    @Length(min = 8, max = 25)
-    private String password;
-
-    @NotEmpty
-    @NotNull
-    @Email
-    private String email;
+    private int rol;
 
     @NotNull
     @Length(min = 3, max = 25)
-    private String firstName;
+    private String name;
 
     @NotNull
     @Length(min = 3, max = 25)
@@ -39,22 +28,30 @@ public class SingUp implements Serializable {
     @Pattern(regexp = "^[0-9]{4}-[0-9]{4}$")
     private String phone;
 
-    private int preference;
+    @NotEmpty
+    @NotNull
+    @Email
+    private String email;
+
+    @NotNull
+    @Length(max = 25)
+    private String password;
+
 
     public SingUp() {
+
     }
 
-    public SingUp(int id, int roleId, String userName, String password, String email, String firstName, String lastName, String phone, int preference) {
+    public SingUp(int id, @NotNull @NotEmpty int rol, @NotNull @Length(min = 3, max = 25) String name, @NotNull @Length(min = 3, max = 25) String lastName, @Pattern(regexp = "^[0-9]{4}-[0-9]{4}$") String phone, @NotEmpty @NotNull @Email String email, @NotNull @Length(min = 8, max = 25) String password) {
         this.id = id;
-        this.roleId = roleId;
-        this.userName = userName;
-        this.password = password;
-        this.email = email;
-        this.firstName = firstName;
+        this.rol = rol;
+        this.name = name;
         this.lastName = lastName;
         this.phone = phone;
-        this.preference = preference;
+        this.email = email;
+        this.password = password;
     }
+
 
     public int getId() {
         return id;
@@ -64,52 +61,28 @@ public class SingUp implements Serializable {
         this.id = id;
     }
 
-    public int getRoleId() {
-        return roleId;
+    public int getRol() {
+        return rol;
     }
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
+    public void setRol(int rol) {
+        this.rol = rol;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getName() {
+        return name;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastname(String lastname) {
+        this.lastName = lastname;
     }
 
     public String getPhone() {
@@ -120,26 +93,33 @@ public class SingUp implements Serializable {
         this.phone = phone;
     }
 
-    public int getPreference() {
-        return preference;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPreference(int preference) {
-        this.preference = preference;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
     public String toString() {
         return "SingUp{" +
                 "id=" + id +
-                ", roleId=" + roleId +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", firstName='" + firstName + '\'' +
+                ", rol=" + rol +
+                ", name='" + name + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", phone='" + phone + '\'' +
-                ", preference='" + preference + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }
+

@@ -1,4 +1,4 @@
-package com.inwshop.util;
+package com.inwshop.utils;
 
 public class Validators {
 

@@ -1,51 +1,65 @@
 package com.inwshop.repository;
 
-import com.inwshop.exception.BadRequestRegisterExeception;
-import com.inwshop.model.ErrorMessage;
-import com.inwshop.model.FieldErrorsModel;
+import com.inwshop.DTO.ErrorDTO;
+import com.inwshop.DTO.FieldErrorDTO;
+import com.inwshop.exceptions.BadRequestRegisterExeception;
 import com.inwshop.model.SingUp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class SingUpRepository {
+public class SingUpRepository{
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private ErrorMessage errorMessage;
+    public static ErrorDTO errorMessage = new ErrorDTO();
 
     private static int contadorEventoDuplicado = 0;
 
     public Boolean register(SingUp singup){
+
         int insert = 0;
 
-            String sql = "INSERT INTO user (rol_id,user_name,password,email,first_name,last_name,phone,preference) VALUES (?,?,?,?,?,?,?,?)";
-            insert = jdbcTemplate.update(sql, singup.getRoleId(), singup.getUserName(),
-                    singup.getPassword(), singup.getEmail(), singup.getFirstName(),
-                    singup.getLastName(), singup.getPhone(), singup.getPreference());
+            String sql = "INSERT INTO J0120_user (rol_id,password,email,first_name,last_name,phone) VALUES (?,?,?,?,?,?)";
+            insert = jdbcTemplate.update(sql, singup.getRol(),
+                    singup.getPassword(), singup.getEmail(), singup.getName(),
+                    singup.getLastName(), singup.getPhone());
 
         return insert > 0;
     }
 
-    public ErrorMessage duplicateKey(String key, String value) throws BadRequestRegisterExeception{
-        String sql = "SELECT COUNT(*) FROM user WHERE "+key+" = ? LIMIT 1";
+    public ErrorDTO duplicateKey(String key, String value) throws BadRequestRegisterExeception{
+        System.out.println("Miau base duplicateKey");
+        String sql = "SELECT COUNT(*) FROM J0120_user WHERE "+key+" = ? LIMIT 1";
         Integer exists = jdbcTemplate.queryForObject(sql,Integer.class,value);
         contadorEventoDuplicado++;
-        if(contadorEventoDuplicado == 4){
+        if(contadorEventoDuplicado == 3){
             errorMessage.clearFieldErrors();
             contadorEventoDuplicado = 1;
         }
         if (exists > 0){
             if(key.equals("email"))
-                errorMessage.addFieldError(new FieldErrorsModel(key,"El email ya está registrado por otra cuenta"));
-            else if(key.equals("user_name"))
-                errorMessage.addFieldError(new FieldErrorsModel("userName","El nombre de usuario ya está registrado por otra cuenta"));
+                errorMessage.addFieldError(new FieldErrorDTO(key,"El email ya está registrado por otra cuenta"));
             else if(key.equals("phone"))
-                errorMessage.addFieldError(new FieldErrorsModel(key,"El número de teléfono ya está registrado por otra cuenta"));
+                errorMessage.addFieldError(new FieldErrorDTO(key,"El número de teléfono ya está registrado por otra cuenta"));
         }
         return errorMessage;
     }
+
+    public SingUp findUserByEmail(String email){
+        String sql = "SELECT * FROM  J0120_user WHERE email = ?";
+        return jdbcTemplate.queryForObject(sql,new Object[]{email},(rs, rowNum) ->
+                new SingUp(
+                        rs.getInt("id"),
+                        rs.getInt("rol_id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("phone"),
+                        rs.getString("email"),
+                        rs.getString("password")
+                ));
+    }
+
 }
