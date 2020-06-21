@@ -37,7 +37,7 @@ public class ShopServiceImpl implements ShopService {
         byte[] bytes = file.getBytes();
         Path path = Paths.get(pathImage);
         Files.write(path,bytes);
-        String Uri = path.toAbsolutePath().toUri().toString();
+        String Uri = path.toAbsolutePath().toString();
         UserDTO user = userDetailsLogged.getUser();
         shopRepository.createShop(new ShopModel(name,Uri),user.getId());
         return true;
