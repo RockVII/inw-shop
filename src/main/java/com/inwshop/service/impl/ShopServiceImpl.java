@@ -30,14 +30,16 @@ public class ShopServiceImpl implements ShopService {
     @Override
     public Boolean createShop(MultipartFile file, String name) throws IOException {
         Integer numero = Math.toIntExact(Math.round(Math.random()*1000));
-        String[] nameParts = file.getOriginalFilename().split("\\.");
+        String nameFormat = file.getOriginalFilename().toLowerCase().replace(" ","");
+        String[] nameParts = nameFormat.split("\\.");
         String nameUnique = nameParts[0]+numero+"."+nameParts[1];
         String pathImage = UPLOADED_FOLDER+nameUnique;
         byte[] bytes = file.getBytes();
         Path path = Paths.get(pathImage);
         Files.write(path,bytes);
+        String Uri = path.toAbsolutePath().toUri().toString();
         UserDTO user = userDetailsLogged.getUser();
-        shopRepository.createShop(new ShopModel(name,pathImage),user.getId());
+        shopRepository.createShop(new ShopModel(name,Uri),user.getId());
         return true;
     }
 }
