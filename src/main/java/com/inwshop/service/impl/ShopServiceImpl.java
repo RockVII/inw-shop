@@ -6,6 +6,7 @@ import com.inwshop.model.SingUp;
 import com.inwshop.repository.ShopRepository;
 import com.inwshop.repository.SingUpRepository;
 import com.inwshop.service.ShopService;
+import com.inwshop.service.UploadImage;
 import com.inwshop.utils.UserDetailsLogged;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,13 +34,14 @@ public class ShopServiceImpl implements ShopService {
         String nameFormat = file.getOriginalFilename().toLowerCase().replace(" ","");
         String[] nameParts = nameFormat.split("\\.");
         String nameUnique = nameParts[0]+numero+"."+nameParts[1];
-        String pathImage = UPLOADED_FOLDER+nameUnique;
-        byte[] bytes = file.getBytes();
-        Path path = Paths.get(pathImage);
-        Files.write(path,bytes);
-        String Uri = path.toAbsolutePath().toString();
-        UserDTO user = userDetailsLogged.getUser();
-        shopRepository.createShop(new ShopModel(name,Uri),user.getId());
+        UploadImage.upload(file,nameUnique);
+//        String pathImage = UPLOADED_FOLDER+nameUnique;
+//        byte[] bytes = file.getBytes();
+//        Path path = Paths.get(pathImage);
+//        Files.write(path,bytes);
+//        String Uri = path.toAbsolutePath().toString();
+//        UserDTO user = userDetailsLogged.getUser();
+//        shopRepository.createShop(new ShopModel(name,Uri),user.getId());
         return true;
     }
 }
