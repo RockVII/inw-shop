@@ -29,9 +29,9 @@ public class ShopController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST )
     @PreAuthorize("hasRole('ROLE_vendedor')")
-    public ResponseEntity<?> createShop(@RequestParam("image") MultipartFile image, @RequestParam("name") String name) throws IOException {
-        shopService.createShop(image,name);
-        return new  ResponseEntity<ResponseDTO>(new ResponseDTO(new DataModel("Tienda guardada")),HttpStatus.OK);
+    public ResponseEntity<?> createShop(@RequestBody ShopModel shop) throws IOException {
+        shopService.createShop(shop);
+        return new  ResponseEntity<ResponseDTO>(new ResponseDTO(new DataModel("Tienda creada con éxito")),HttpStatus.OK);
 
 
     }
