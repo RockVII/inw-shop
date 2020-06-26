@@ -31,7 +31,7 @@ public class ShopController {
     @PreAuthorize("hasRole('ROLE_vendedor')")
     public ResponseEntity<?> createShop(@RequestBody ShopModel shop) throws IOException {
         shopService.createShop(shop);
-        return new  ResponseEntity<ResponseDTO>(new ResponseDTO(new DataModel("Tienda creada con éxito")),HttpStatus.OK);
+        return new  ResponseEntity<ResponseDTO>(new ResponseDTO(new DataModel("Tienda creada con éxito!")),HttpStatus.OK);
 
 
     }
