@@ -15,21 +15,24 @@ public class SendToLogin {
 
     public static String send(String email, String password) throws IOException {
         HttpClient http = HttpClientBuilder.create().build();
+        int error = 0;
+        String respuesta = null;
         try{
-            HttpPost request = new HttpPost("https://inw-login.herokuapp.com/login");
-            LoginCredentials loginCredentials = new LoginCredentials(email,password);
-            Gson gson = new Gson();
-            String json = gson.toJson(loginCredentials);
-            StringEntity params = new StringEntity(json);
-            request.addHeader("content-type","application/json");
-            request.addHeader("Accept","application/json");
-            request.setEntity(params);
-            HttpResponse response = http.execute(request);
-            String respuesta = EntityUtils.toString(response.getEntity());
-            System.out.println(json.toString());
-            System.out.println(respuesta);
+            do {
+                HttpPost request = new HttpPost("https://inw-login.herokuapp.com/login");
+                LoginCredentials loginCredentials = new LoginCredentials(email, password);
+                Gson gson = new Gson();
+                String json = gson.toJson(loginCredentials);
+                StringEntity params = new StringEntity(json);
+                request.addHeader("content-type", "application/json");
+                request.addHeader("Accept", "application/json");
+                request.setEntity(params);
+                HttpResponse response = http.execute(request);
+                respuesta = EntityUtils.toString(response.getEntity());
+                System.out.println(respuesta);
+                error = respuesta.indexOf("Usuario o contraseña incorrectos");
+            }while(error != -1);
             return respuesta;
-
 
         }catch (Exception ex){
             return null;

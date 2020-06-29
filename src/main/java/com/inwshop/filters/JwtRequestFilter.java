@@ -56,9 +56,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 		String jwtToken = request.getHeader("Authorization");
 		System.out.println(jwtToken);
+		String path = "/signup/register";
+		System.out.println(request.getRequestURI());
 
-		if (checkPublic.execute(request.getRequestURI()
-		) && jwtToken==null){
+		if (path.equals(request.getRequestURI()) && jwtToken==null){
 			filterChain.doFilter(request, response);
 			return;
 		}

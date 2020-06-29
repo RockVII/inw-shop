@@ -45,11 +45,12 @@ public class PermissionsFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 
-		if (checkPublic.execute(request.getRequestURI())){
+		String path = "/signup/register";
+
+		if (path.equals(request.getRequestURI())){
 			filterChain.doFilter(request, response);
 			return;
 		}
-
 		try {
 
 			UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
