@@ -15,7 +15,7 @@ public class SendToLogin {
 
     public static String send(String email, String password) throws IOException {
         HttpClient http = HttpClientBuilder.create().build();
-        int error = 0;
+        int error = 0, contador = 0;
         String respuesta = null;
         try{
             do {
@@ -31,7 +31,8 @@ public class SendToLogin {
                 respuesta = EntityUtils.toString(response.getEntity());
                 System.out.println(respuesta);
                 error = respuesta.indexOf("Usuario o contraseña incorrectos");
-            }while(error != -1);
+                contador++;
+            }while(error != -1 && contador < 3);
             return respuesta;
 
         }catch (Exception ex){
