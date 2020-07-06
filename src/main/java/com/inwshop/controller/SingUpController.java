@@ -28,11 +28,13 @@ public class SingUpController {
 
     @PostMapping("/register")
     @PreAuthorize("permitAll()")
-    public String register(@Valid @RequestBody  SingUp singup) throws IOException {
+    public ResponseEntity<?> register(@Valid @RequestBody  SingUp singup) throws IOException {
         String email = singup.getEmail();
         String password = singup.getPassword();
-        if(singUpService.register(singup))
-            return SendToLogin.send(email,password);
+        if(singUpService.register(singup)) {
+            String response = SendToLogin.send(email,password);
+            return ResponseEntity.ok().body(response);
+        }
         return null;
     }
 
